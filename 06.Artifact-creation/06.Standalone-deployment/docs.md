@@ -72,3 +72,27 @@ mender-update commit
 By running this command, Mender will mark the update as successful and permanent.
 
 To deploy another update, simply run `mender-update install <URI>` again, then reboot and commit.
+
+Here's a polished version of your text for the Mender GitHub documentation pull request:  
+
+---
+
+## Rolling Back a deployment  
+
+If you are dissatisfied with a deployment, you can roll it back by running the following command on your device's terminal:  
+
+```bash
+mender-update rollback
+```  
+
+This command triggers the `ArtifactRollback` state of the update module and executes any associated rollback state scripts.
+
+### Special Case: OS updates  
+
+For rootfs updates, which require a reboot, the update module configures the bootloader environment. If the updated system reboots without committing the update, the device will revert to the previous system version.  
+
+After booting into the previous system, the update remains in a pending state, as the `ArtifactRollback` state hasn't been fully executed. To properly complete the rollback, you must run:  
+
+```bash
+mender-update rollback
+```  
